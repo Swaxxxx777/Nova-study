@@ -488,24 +488,16 @@ def nova_mood(score=None):
 # 9. AI — Groq (online) / Ollama (local)
 # =========================================
 def _chat(system: str, user: str, max_tokens: int = 900) -> str:
-    """Llama a Groq si hay API key, sino a Ollama local."""
-    try:
-        from groq import Groq
-        client = Groq(api_key=st.secrets["GROQ_API_KEY"])
-        r = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
-            messages=[{"role":"system","content":system},
-                      {"role":"user","content":user}],
-            max_tokens=max_tokens, temperature=0.7,
-        )
-        return r.choices[0].message.content
-    except Exception:
-        # Fallback a Ollama local
-        import ollama
-        r = ollama.chat(model="llama3.1:8b",
-            messages=[{"role":"system","content":system},
-                      {"role":"user","content":user}])
-        return r["message"]["content"]
+    """Llama a Groq API."""
+    from groq import Groq
+    client = Groq(api_key=st.secrets["GROQ_API_KEY"])
+    r = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[{"role":"system","content":system},
+                  {"role":"user","content":user}],
+        max_tokens=max_tokens, temperature=0.7,
+    )
+    return r.choices[0].message.content
 
 def ask_ai(question: str) -> str:
     return _chat(
@@ -519,15 +511,15 @@ def ask_ai(question: str) -> str:
     )
 
 def generate_quiz(topic):
-    r = ollama.chat(model="llama3.1:8b", messages=[
-        {"role":"system","content":(
+    try:
+        text = _chat(
             'Create a quiz. Return ONLY valid JSON, nothing else:\n'
             '{"questions":[{"question":"...","options":["A","B","C","D"],'
             '"answer_index":0,"explanation":"...","difficulty":"easy"}]}\n'
-            "Rules: 5 questions. 2 easy, 2 medium, 1 hard. 4 options. answer_index 0-3.")},
-        {"role":"user","content":f"Topic: {topic}"}])
-    try:
-        m = re.search(r"\{.*\}", r["message"]["content"], re.DOTALL)
+            "Rules: 5 questions. 2 easy, 2 medium, 1 hard. 4 options. answer_index 0-3.",
+            f"Topic: {topic}", max_tokens=1200
+        )
+        m = re.search(r"\{.*\}", text, re.DOTALL)
         data = json.loads(m.group())
         qs = []
         for q in data["questions"]:
