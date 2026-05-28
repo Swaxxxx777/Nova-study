@@ -1010,28 +1010,33 @@ else:
 
             rows_html = ""
             for rank, player in enumerate(board[:5], 1):
-                is_me = player["name"] == user_name
-                me_cls = "me" if is_me else ""
-                rows_html += f"""
-                <div class='lb-row {me_cls}'>
-                    <div style='display:flex;align-items:center;gap:14px;'>
-                        <span class='lb-rank {me_cls}'>{rank_icons.get(rank, str(rank))}</span>
-                        <div style='width:36px;height:36px;border-radius:12px;
-                            background:rgba(255,255,255,0.06);
-                            display:flex;align-items:center;justify-content:center;font-size:14px;'>
-                            {get_avatar(player["name"])}
-                        </div>
-                        <span class='lb-name {me_cls}'>{player["name"]}{"  ← you" if is_me else ""}</span>
-                    </div>
-                    <span class='lb-xp {me_cls}'>{player["xp"]:,} XP</span>
-                </div>"""
+                is_me   = player["name"] == user_name
+                me_cls  = "me" if is_me else ""
+                av      = get_avatar(player["name"])
+                pname   = player["name"] + ("  ← you" if is_me else "")
+                pxp     = f"{player['xp']:,} XP"
+                ri      = rank_icons.get(rank, str(rank))
+                rows_html += (
+                    f"<div class=\"lb-row {me_cls}\">"
+                    f"<div style=\"display:flex;align-items:center;gap:14px;\">"
+                    f"<span class=\"lb-rank {me_cls}\">{ri}</span>"
+                    f"<div style=\"width:36px;height:36px;border-radius:12px;"
+                    f"background:rgba(255,255,255,0.06);"
+                    f"display:flex;align-items:center;justify-content:center;font-size:14px;\">"
+                    f"{av}</div>"
+                    f"<span class=\"lb-name {me_cls}\">{pname}</span>"
+                    f"</div>"
+                    f"<span class=\"lb-xp {me_cls}\">{pxp}</span>"
+                    f"</div>"
+                )
 
-            st.markdown(f"""
-            <div class='lb-panel'>
-                <div class='lb-panel-title'>🏆 Leaderboard</div>
-                {rows_html}
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown(
+                f"<div class=\"lb-panel\">"
+                f"<div class=\"lb-panel-title\">🏆 Leaderboard</div>"
+                f"{rows_html}"
+                f"</div>",
+                unsafe_allow_html=True
+            )
 
         with col_right:
             # Activity + Exam + Next level en una columna
