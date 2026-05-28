@@ -31,7 +31,7 @@ _DEFAULTS = {
     "weak_topics": {}, "exam_date": None, "exam_subject": "",
     "quiz": None, "last_score": None, "last_topic": "",
     "study_plan_days": [], "flashcards": [], "flash_revealed": {},
-    "battle_state": None, "dark_mode": True,
+    "battle_state": None, "dark_mode": True, "page_override": None,
     "streak_days": 0, "last_study_date": None,
     "mascot_mood": "idle", "motivational_msg": "",
     "leaderboard": [
@@ -731,6 +731,7 @@ else:
         st.rerun()
     st.sidebar.markdown("---")
     st.sidebar.markdown("## ⚡ Navigation")
+    _override = st.session_state.pop("page_override", None)
     page = st.sidebar.radio("", [
         "🏠 Home", "🤖 Nova Tutor", "🎯 Quiz Arena",
         "⚔️ Battle Mode", "🃏 Flashcards", "📅 Study Plan",
@@ -738,89 +739,411 @@ else:
         "🏆 Progress", "🥇 Leaderboard", "📝 About"
     ])
 
-    # ── HOME ────────────────────────────────────────────
+    # ── HOME ──────────────────────────────────────────
     if page == "🏠 Home":
+
+        # ── variables de datos reales ─────────────────────────────────────
+        streak      = st.session_state.get("streak_days", 0)
+        mood_state, msg = nova_mood(st.session_state.get("last_score"))
+        emoji_m, anim_m = mood_state
+        xp_now, xp_range, _ = xp_progress()
+        pct_xp   = int(min(xp_now / max(xp_range, 1), 1.0) * 100)
+        lvl_now  = st.session_state.level
+        lvl_name = LEVEL_NAMES.get(lvl_now, "Spark")
+        lvl_icon = LEVEL_ICONS.get(lvl_now, "🌱")
+        next_lvl = LEVEL_NAMES.get(min(lvl_now+1, 6), "Max Level")
+        next_icon= LEVEL_ICONS.get(min(lvl_now+1, 6), "💎")
+        fire_bar = "🔥" * min(streak, 7) if streak else "🌱"
+        streak_color = "#f97316" if streak >= 3 else "#818cf8"
+
+        # ── misión del día basada en examen o tema reciente ───────────────
+        if st.session_state.exam_subject:
+            mission_title = f"Master {st.session_state.exam_subject} today!"
+        elif st.session_state.last_topic:
+            mission_title = f"Keep practicing {st.session_state.last_topic}!"
+        else:
+            mission_title = "Start your first quiz and earn XP!"
+
+        # ── HERO HEADER ── estilo Lovable ─────────────────────────────────
         st.markdown(f"""
-        <div class='card'>
-            <h2>Welcome back, {user_name}! 👋</h2>
-            <p>Practice quizzes, review flashcards, challenge a friend in Battle Mode,
-            track weak topics, and set an exam countdown.</p>
-        </div>""", unsafe_allow_html=True)
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+        .lb-hero {{
+            background: linear-gradient(135deg, #4f46e5 0%, #312e81 60%, #1e1b4b 100%);
+            border-radius: 28px;
+            padding: 40px 44px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 60px rgba(79,70,229,0.35);
+        }}
+        .lb-hero::before {{
+            content: '🧪';
+            position: absolute;
+            bottom: -30px; right: -10px;
+            font-size: 160px;
+            opacity: 0.08;
+            transform: rotate(12deg);
+            pointer-events: none;
+        }}
+        .lb-badge {{
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 999px;
+            padding: 4px 14px;
+            font-size: 11px; font-weight: 700;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 16px;
+        }}
+        .lb-hero h2 {{
+            font-family: 'Space Grotesk', sans-serif !important;
+            font-size: clamp(24px, 3.5vw, 34px) !important;
+            font-weight: 800 !important;
+            color: white !important;
+            line-height: 1.2 !important;
+            margin: 0 0 20px 0 !important;
+            max-width: 520px;
+        }}
+        .lb-btn {{
+            display: inline-block;
+            background: white;
+            color: #312e81;
+            font-weight: 700;
+            font-size: 15px;
+            padding: 12px 28px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }}
+        .lb-btn:hover {{ background: #818cf8; color: white; }}
 
-        c1,c2,c3,c4 = st.columns(4)
-        for col,(icon,title,desc) in zip([c1,c2,c3,c4],[
-            ("🤖","Nova Tutor","AI explanations on any topic."),
-            ("🎯","Quiz Arena","Practice and earn XP."),
-            ("⚔️","Battle Mode","Quiz duel with a friend!"),
-            ("📉","Weak Topics","See where to improve.")]):
-            with col:
-                st.markdown(
-                    f"<div class='card' style='text-align:center;'>"
-                    f"<div style='font-size:36px;'>{icon}</div>"
-                    f"<h3 style='margin:8px 0 4px;'>{title}</h3>"
-                    f"<p style='font-size:13px;'>{desc}</p></div>",
-                    unsafe_allow_html=True)
+        .lb-stat {{
+            background: rgba(15,10,40,0.6);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 24px 28px;
+            display: flex; align-items: center; gap: 20px;
+            backdrop-filter: blur(12px);
+            transition: transform 0.2s;
+            height: 100%;
+        }}
+        .lb-stat:hover {{ transform: translateY(-2px); }}
+        .lb-stat-icon {{
+            width: 60px; height: 60px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px;
+            flex-shrink: 0;
+        }}
+        .lb-stat-label {{
+            font-size: 12px; color: rgba(255,255,255,0.4);
+            text-transform: uppercase; letter-spacing: 1px;
+        }}
+        .lb-stat-value {{
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px; font-weight: 700; color: white;
+            line-height: 1.1;
+        }}
 
-        if st.session_state.quiz_history:
-            st.markdown("### 📋 Recent Activity")
-            for e in reversed(st.session_state.quiz_history[-3:]):
-                ps = int(e["score"]/e["total"]*100)
-                bc = "#22c55e" if ps>=80 else "#f59e0b" if ps>=60 else "#ef4444"
-                st.markdown(
-                    f"<div class='history-item'>"
-                    f"<span>📚 <b>{e['topic']}</b></span>"
-                    f"<span>{e['score']}/{e['total']}</span>"
-                    f"<span style='color:{bc};font-weight:700;'>{ps}%</span>"
-                    f"<span style='color:#818cf8;'>+{e['xp']} XP</span>"
-                    f"<span style='opacity:0.6;font-size:13px;'>{e['date']}</span>"
-                    f"</div>", unsafe_allow_html=True)
+        .lb-panel {{
+            background: rgba(15,10,40,0.5);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 28px;
+            padding: 28px 32px;
+            backdrop-filter: blur(12px);
+            height: 100%;
+        }}
+        .lb-panel-title {{
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px; font-weight: 700; color: white;
+            display: flex; align-items: center; gap: 8px;
+            margin-bottom: 18px;
+        }}
+        .lb-row {{
+            display: flex; align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            border-radius: 16px;
+            margin-bottom: 8px;
+            transition: background 0.15s;
+        }}
+        .lb-row:hover {{ background: rgba(255,255,255,0.04); }}
+        .lb-row.me {{
+            background: rgba(79,70,229,0.18);
+            border: 1px solid rgba(99,102,241,0.35);
+        }}
+        .lb-rank {{
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700; font-size: 15px;
+            color: rgba(255,255,255,0.3);
+            width: 24px; text-align: center;
+        }}
+        .lb-rank.me {{ color: #818cf8; }}
+        .lb-name {{ font-weight: 500; color: rgba(255,255,255,0.85); font-size: 14px; }}
+        .lb-name.me {{ color: white; font-weight: 700; }}
+        .lb-xp {{ font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+            color: rgba(255,255,255,0.5); font-size: 14px; }}
+        .lb-xp.me {{ color: #818cf8; }}
 
-        if st.session_state.exam_date:
+        .lb-xpbar-outer {{
+            background: rgba(255,255,255,0.06);
+            border-radius: 999px; height: 8px;
+            overflow: hidden; margin-top: 8px;
+        }}
+        .lb-xpbar-inner {{
+            height: 100%; border-radius: 999px;
+            background: linear-gradient(90deg, #818cf8, #a5f3fc);
+            box-shadow: 0 0 12px rgba(129,140,248,0.5);
+        }}
+
+        .lb-activity-row {{
+            display: flex; align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 14px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.15s;
+        }}
+        .lb-activity-row:hover {{ transform: translateX(4px); }}
+        </style>
+
+        <!-- HEADER personalizado -->
+        <div style='margin-bottom: 28px;'>
+            <div style='display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;'>
+                <div>
+                    <h1 style='font-family:Space Grotesk,sans-serif;font-size:clamp(26px,4vw,38px);
+                        font-weight:800;color:white;margin:0 0 4px 0;'>
+                        Hey, {user_name}! {emoji_m}
+                    </h1>
+                    <p style='color:rgba(255,255,255,0.45);font-size:15px;margin:0;'>
+                        {"🔥 Your streak is on fire: " + str(streak) + " days in a row." if streak >= 3
+                          else "Start your streak today — study something new!"}
+                    </p>
+                </div>
+                <div style='display:flex;align-items:center;gap:20px;'>
+                    <div style='text-align:right;'>
+                        <div style='font-size:11px;color:rgba(255,255,255,0.35);
+                            text-transform:uppercase;letter-spacing:1.2px;margin-bottom:4px;'>
+                            {lvl_icon} Level {lvl_now} · {lvl_name}
+                        </div>
+                        <div style='display:flex;align-items:center;gap:12px;'>
+                            <span style='font-size:13px;font-weight:700;color:white;'>
+                                {st.session_state.xp} / {xp_range} XP
+                            </span>
+                            <div style='width:120px;background:rgba(255,255,255,0.07);
+                                border-radius:999px;height:7px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);'>
+                                <div style='height:100%;width:{pct_xp}%;
+                                    background:linear-gradient(90deg,#818cf8,#a5f3fc);
+                                    border-radius:999px;'></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style='width:52px;height:52px;border-radius:16px;
+                        background:rgba(79,70,229,0.3);
+                        border:2px solid rgba(99,102,241,0.5);
+                        display:flex;align-items:center;justify-content:center;font-size:24px;'>
+                        {user_avatar}
+                    </div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # ── ROW 1: HERO MISSION + STATS ───────────────────────────────────
+        col_hero, col_stats = st.columns([3, 1], gap="medium")
+
+        with col_hero:
+            st.markdown(f"""
+            <div class='lb-hero'>
+                <div class='lb-badge'>✨ Daily Mission</div>
+                <h2>{mission_title}</h2>
+            </div>
+            """, unsafe_allow_html=True)
+            # Botón nativo de Streamlit (funcional)
+            if st.button("🎯 Start Quiz · +25 XP", type="primary", use_container_width=False):
+                st.session_state.page_override = "🎯 Quiz Arena"
+                st.rerun()
+
+        with col_stats:
+            st.markdown(f"""
+            <div class='lb-stat' style='margin-bottom:16px;'>
+                <div class='lb-stat-icon'>🔥</div>
+                <div>
+                    <div class='lb-stat-label'>Study Streak</div>
+                    <div class='lb-stat-value'>{streak} {"Days" if streak != 1 else "Day"}</div>
+                    <div style='font-size:18px;margin-top:2px;'>{fire_bar}</div>
+                </div>
+            </div>
+            <div class='lb-stat'>
+                <div class='lb-stat-icon'>⚡</div>
+                <div>
+                    <div class='lb-stat-label'>Battle Wins</div>
+                    <div class='lb-stat-value'>{st.session_state.battle_wins}</div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        # ── ROW 2: LEADERBOARD + ACTIVITY + EXAM ─────────────────────────
+        col_lb, col_right = st.columns([5, 7], gap="medium")
+
+        with col_lb:
+            # Leaderboard con datos reales de Supabase
+            board = st.session_state.leaderboard.copy()
             try:
-                exam = datetime.strptime(st.session_state.exam_date, "%Y-%m-%d")
-                dl = (exam - datetime.now()).days
-                if dl >= 0:
-                    st.markdown(
-                        f"<div class='card' style='text-align:center;'>"
-                        f"<h3>⏰ {st.session_state.exam_subject or 'Upcoming Exam'}</h3>"
-                        f"<div style='font-size:48px;font-family:Syne,sans-serif;"
-                        f"font-weight:900;color:#38bdf8;'>{dl}</div>"
-                        f"<p>days remaining</p></div>", unsafe_allow_html=True)
+                for name, data in load_profiles().items():
+                    ex = next((p for p in board if p["name"]==name), None)
+                    if ex: ex["xp"]=data.get("xp",0); ex["level"]=data.get("level",1)
+                    else: board.append({"name":name,"xp":data.get("xp",0),"level":data.get("level",1)})
             except: pass
+            board.sort(key=lambda x: x["xp"], reverse=True)
+            rank_icons = {1:"👑", 2:"🐯", 3:"🦊", 4:"🐼", 5:"🦁"}
 
-        # ── STREAK CARD ──────────────────────────────────────────────────
-        streak = st.session_state.get('streak_days', 0)
-        c_s1, c_s2 = st.columns(2)
-        with c_s1:
-            fire = '🔥' * min(streak, 7)
-            color = '#f59e0b' if streak >= 3 else '#38bdf8'
-            st.markdown(
-                f"<div class='card' style='text-align:center;'>"
-                f"<div style='font-size:13px;opacity:0.6;text-transform:uppercase;"
-                f"letter-spacing:1px;'>Study Streak</div>"
-                f"<div style='font-size:56px;font-family:Syne,sans-serif;"
-                f"font-weight:900;color:{color};'>{streak}</div>"
-                f"<div style='font-size:20px;'>{fire if fire else '🌱'}</div>"
-                f"<div style='font-size:13px;opacity:0.7;margin-top:4px;'>"
-                f"{'days in a row!' if streak else 'Start today!'}</div>"
-                f"</div>", unsafe_allow_html=True)
-        with c_s2:
-            lvl_now = st.session_state.level
-            xn, xr, _ = xp_progress()
-            pct_now = int(min(xn/max(xr,1),1.0)*100)
-            next_lvl = LEVEL_NAMES.get(min(lvl_now+1,6),'Max')
-            st.markdown(
-                f"<div class='card' style='text-align:center;'>"
-                f"<div style='font-size:13px;opacity:0.6;text-transform:uppercase;"
-                f"letter-spacing:1px;'>Next Level</div>"
-                f"<div style='font-size:22px;font-family:Syne,sans-serif;"
-                f"font-weight:800;margin:8px 0;'>{LEVEL_ICONS.get(min(lvl_now+1,6),'💎')} {next_lvl}</div>"
-                f"<div style='background:rgba(99,102,241,0.15);border-radius:999px;"
-                f"height:12px;overflow:hidden;'>"
-                f"<div style='height:100%;width:{pct_now}%;background:linear-gradient(90deg,#a5f3fc,#818cf8);"
-                f"border-radius:999px;'></div></div>"
-                f"<div style='font-size:12px;opacity:0.6;margin-top:6px;'>{xn}/{xr} XP</div>"
-                f"</div>", unsafe_allow_html=True)
+            rows_html = ""
+            for rank, player in enumerate(board[:5], 1):
+                is_me = player["name"] == user_name
+                me_cls = "me" if is_me else ""
+                rows_html += f"""
+                <div class='lb-row {me_cls}'>
+                    <div style='display:flex;align-items:center;gap:14px;'>
+                        <span class='lb-rank {me_cls}'>{rank_icons.get(rank, str(rank))}</span>
+                        <div style='width:36px;height:36px;border-radius:12px;
+                            background:rgba(255,255,255,0.06);
+                            display:flex;align-items:center;justify-content:center;font-size:14px;'>
+                            {get_avatar(player["name"])}
+                        </div>
+                        <span class='lb-name {me_cls}'>{player["name"]}{"  ← you" if is_me else ""}</span>
+                    </div>
+                    <span class='lb-xp {me_cls}'>{player["xp"]:,} XP</span>
+                </div>"""
+
+            st.markdown(f"""
+            <div class='lb-panel'>
+                <div class='lb-panel-title'>🏆 Leaderboard</div>
+                {rows_html}
+            </div>
+            """, unsafe_allow_html=True)
+
+        with col_right:
+            # Activity + Exam + Next level en una columna
+            col_a, col_b = st.columns(2, gap="small")
+
+            with col_a:
+                # Achievements
+                badges = st.session_state.badges
+                badge_emojis = {"first_quiz":"🎯","perfect":"⭐","five_quizzes":"🏅",
+                                "level3":"🔥","battle_win":"⚔️","master":"💎"}
+                shown = [badge_emojis.get(b,"🏅") for b in badges[:3]]
+                extras = max(0, len(badges) - 3)
+                badge_html = "".join(
+                    f"<div style='width:42px;height:42px;border-radius:999px;"
+                    f"background:rgba(255,255,255,0.06);border:2px solid rgba(15,10,40,1);"
+                    f"display:flex;align-items:center;justify-content:center;"
+                    f"font-size:18px;margin-left:-10px;first:margin-left:0;'>{e}</div>"
+                    for e in shown
+                )
+                if extras:
+                    badge_html += f"<div style='width:42px;height:42px;border-radius:999px;background:rgba(255,255,255,0.05);border:2px solid rgba(15,10,40,1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);margin-left:-10px;'>+{extras}</div>"
+                st.markdown(f"""
+                <div class='lb-panel'>
+                    <div style='width:44px;height:44px;background:rgba(255,255,255,0.05);
+                        border-radius:14px;display:flex;align-items:center;
+                        justify-content:center;margin-bottom:14px;font-size:20px;'>🏅</div>
+                    <div class='lb-panel-title' style='margin-bottom:8px;'>Achievements</div>
+                    <p style='font-size:13px;color:rgba(255,255,255,0.35);margin:0 0 16px 0;'>
+                        {st.session_state.total_quizzes} quizzes completed.
+                    </p>
+                    <div style='display:flex;align-items:center;margin-top:auto;'>
+                        {"".join(f"<div style='width:42px;height:42px;border-radius:999px;background:rgba(255,255,255,0.06);border:2px solid rgba(15,10,40,0.8);display:flex;align-items:center;justify-content:center;font-size:18px;margin-right:4px;'>{e}</div>" for e in shown) if shown else "<p style='font-size:12px;color:rgba(255,255,255,0.2);'>Complete quizzes to earn badges!</p>"}
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+
+            with col_b:
+                # Exam countdown or next level
+                if st.session_state.exam_date:
+                    try:
+                        exam = datetime.strptime(st.session_state.exam_date, "%Y-%m-%d")
+                        dl = (exam - datetime.now()).days
+                        subj = st.session_state.exam_subject or "Upcoming Exam"
+                        urgency = "🔴" if dl<=3 else "🟡" if dl<=7 else "🟢"
+                        pct_study = max(10, min(90, (7 - dl) * 12)) if dl <= 7 else 20
+                        st.markdown(f"""
+                        <div class='lb-panel'>
+                            <div style='width:44px;height:44px;background:rgba(255,255,255,0.05);
+                                border-radius:14px;display:flex;align-items:center;
+                                justify-content:center;margin-bottom:14px;font-size:20px;'>⏰</div>
+                            <div class='lb-panel-title' style='margin-bottom:8px;'>Next Exam</div>
+                            <p style='font-size:13px;color:rgba(255,255,255,0.35);margin:0 0 16px 0;'>
+                                {urgency} {subj}
+                            </p>
+                            <div style='margin-top:auto;'>
+                                <div style='display:flex;justify-content:space-between;
+                                    font-size:12px;margin-bottom:6px;'>
+                                    <span style='color:rgba(255,255,255,0.4);'>Days left</span>
+                                    <span style='color:#818cf8;font-weight:700;'>{dl}</span>
+                                </div>
+                                <div class='lb-xpbar-outer'>
+                                    <div class='lb-xpbar-inner' style='width:{pct_study}%;'></div>
+                                </div>
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                    except: pass
+                else:
+                    # Next level card
+                    st.markdown(f"""
+                    <div class='lb-panel'>
+                        <div style='width:44px;height:44px;background:rgba(255,255,255,0.05);
+                            border-radius:14px;display:flex;align-items:center;
+                            justify-content:center;margin-bottom:14px;font-size:20px;'>⚡</div>
+                        <div class='lb-panel-title' style='margin-bottom:8px;'>Next Level</div>
+                        <p style='font-size:15px;font-weight:700;color:white;margin:0 0 16px 0;'>
+                            {next_icon} {next_lvl}
+                        </p>
+                        <div>
+                            <div style='display:flex;justify-content:space-between;
+                                font-size:12px;margin-bottom:6px;'>
+                                <span style='color:rgba(255,255,255,0.4);'>Progress</span>
+                                <span style='color:#818cf8;font-weight:700;'>{xp_now}/{xp_range} XP</span>
+                            </div>
+                            <div class='lb-xpbar-outer'>
+                                <div class='lb-xpbar-inner' style='width:{pct_xp}%;'></div>
+                            </div>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+            st.markdown("<br>", unsafe_allow_html=True)
+
+            # Recent activity
+            if st.session_state.quiz_history:
+                st.markdown("<div class='lb-panel-title' style='padding:0 4px;margin-bottom:10px;'>📋 Recent Activity</div>",
+                            unsafe_allow_html=True)
+                for e in reversed(st.session_state.quiz_history[-3:]):
+                    ps = int(e["score"]/e["total"]*100)
+                    c  = "#22c55e" if ps>=80 else "#f59e0b" if ps>=60 else "#ef4444"
+                    st.markdown(f"""
+                    <div class='lb-activity-row'>
+                        <span style='font-size:14px;color:rgba(255,255,255,0.8);'>
+                            📚 <b>{e["topic"]}</b>
+                        </span>
+                        <div style='display:flex;align-items:center;gap:16px;'>
+                            <span style='font-size:13px;color:rgba(255,255,255,0.4);'>{e["score"]}/{e["total"]}</span>
+                            <span style='font-size:13px;font-weight:700;color:{c};'>{ps}%</span>
+                            <span style='font-size:13px;font-weight:700;color:#818cf8;'>+{e["xp"]} XP</span>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
 
     # ── NOVA TUTOR ──────────────────────────────────────
     elif page == "🤖 Nova Tutor":
