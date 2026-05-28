@@ -81,12 +81,12 @@ def inject_styles(dark: bool):
 
     st.markdown(f"""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap');
     html,body,[class*="css"]{{font-family:'DM Sans',sans-serif;}}
     .stApp{{background:{BG};color:{TM};}}
     [data-testid="stSidebar"]{{background:{SB};}}
     [data-testid="stSidebar"] *{{color:white!important;}}
-    .main-title{{font-family:'Syne',sans-serif;font-size:clamp(36px,6vw,64px);font-weight:900;
+    .main-title{{font-family:'Space Grotesk',sans-serif;font-size:clamp(36px,6vw,64px);font-weight:900;
         text-align:center;background:linear-gradient(90deg,{AC},#818cf8,{AC});
         background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
         background-clip:text;animation:shine 4s linear infinite;letter-spacing:-1px;}}
@@ -109,7 +109,7 @@ def inject_styles(dark: bool):
         width:120px;height:120px;background:rgba(255,255,255,0.08);border-radius:50%;}}
     .nova-face{{font-size:72px;text-align:center;animation:float 3s ease-in-out infinite;}}
     @keyframes float{{0%,100%{{transform:translateY(0);}}50%{{transform:translateY(-8px);}}}}
-    .nova-text{{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;text-align:center;}}
+    .nova-text{{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;text-align:center;}}
     .tip-card{{background:{TIPBG};color:{TIPC};padding:20px 24px;border-radius:18px;
         margin-bottom:20px;border-left:5px solid {AC};font-size:16px;line-height:1.6;font-weight:500;}}
     .quiz-box{{background:{QBG};color:{TM};padding:24px 28px;border-radius:18px;
@@ -117,9 +117,9 @@ def inject_styles(dark: bool):
         transition:border-color 0.2s;}}
     .quiz-box:hover{{border-left-color:#818cf8;}}
     .level-box{{background:{LG};color:white;padding:22px;border-radius:20px;
-        font-family:'Syne',sans-serif;font-size:22px;font-weight:800;text-align:center;}}
+        font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;text-align:center;}}
     .certificate{{background:{CERTBG};color:{CERTC};padding:40px;border-radius:28px;
-        border:3px solid {CERTBR};text-align:center;font-family:'Syne',sans-serif;}}
+        border:3px solid {CERTBR};text-align:center;font-family:'Space Grotesk',sans-serif;}}
     .flashcard{{background:{FBG};color:{FTX};padding:40px 32px;border-radius:24px;
         text-align:center;min-height:180px;display:flex;flex-direction:column;
         justify-content:center;transition:transform 0.2s;border:1.5px solid rgba(165,180,252,0.3);}}
@@ -135,16 +135,16 @@ def inject_styles(dark: bool):
     .badge-green{{background:linear-gradient(135deg,#22c55e,#16a34a);color:white;}}
     .xp-bar-outer{{background:rgba(99,102,241,0.15);border-radius:999px;height:14px;overflow:hidden;margin:8px 0 4px;}}
     .metric-tile{{background:{MBG};border:1px solid {CBR};border-radius:16px;padding:18px 22px;text-align:center;}}
-    .metric-value{{font-family:'Syne',sans-serif;font-size:36px;font-weight:900;color:{AC};}}
+    .metric-value{{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:900;color:{AC};}}
     .metric-label{{font-size:13px;color:{TS};text-transform:uppercase;letter-spacing:0.8px;margin-top:4px;}}
     .battle-p1{{background:{BP1};border-radius:20px;padding:20px;text-align:center;border:2px solid #3b82f6;}}
     .battle-p2{{background:{BP2};border-radius:20px;padding:20px;text-align:center;border:2px solid #ef4444;}}
-    .battle-score{{font-family:'Syne',sans-serif;font-size:48px;font-weight:900;}}
+    .battle-score{{font-family:'Space Grotesk',sans-serif;font-size:48px;font-weight:900;}}
     .countdown-box{{background:{CDBG};color:white;padding:32px;border-radius:24px;text-align:center;}}
-    .countdown-number{{font-family:'Syne',sans-serif;font-size:72px;font-weight:900;color:{AC};line-height:1;}}
+    .countdown-number{{font-family:'Space Grotesk',sans-serif;font-size:72px;font-weight:900;color:{AC};line-height:1;}}
     .weak-topic{{background:{WBG};border:1px solid rgba(239,68,68,0.3);border-radius:14px;
         padding:14px 18px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}}
-    h1,h2,h3{{font-family:'Syne',sans-serif!important;color:{TM}!important;}}
+    h1,h2,h3{{font-family:'Space Grotesk',sans-serif!important;color:{TM}!important;}}
     .stButton>button{{font-family:'DM Sans',sans-serif!important;font-weight:600!important;
         border-radius:12px!important;transition:all 0.2s!important;}}
     .stButton>button:hover{{transform:translateY(-1px)!important;box-shadow:0 6px 20px rgba(0,0,0,0.2)!important;}}
@@ -570,9 +570,9 @@ def generate_study_plan(topic: str) -> list:
 # 10. UTILIDADES
 # =========================================
 def diff_badge(d):
-    c = {"easy":"#22c55e","medium":"#f59e0b","hard":"#ef4444"}.get(d,"#94a3b8")
-    l = {"easy":"Easy","medium":"Medium","hard":"Hard"}.get(d,d.capitalize())
-    return f"<span style='background:{c};color:white;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700;'>{l}</span>"
+    cls = {"easy":"n-chip-success","medium":"n-chip-warning","hard":"n-chip-danger"}.get(d,"n-chip-info")
+    l   = {"easy":"Easy","medium":"Medium","hard":"Hard"}.get(d, d.capitalize())
+    return f"<span class='n-chip {cls}'>{l}</span>"
 
 def rec(score, topic):
     if score==5: return f"🌟 Excellent! You've mastered **{topic}**."
@@ -608,8 +608,8 @@ def get_weak_topics():
 # =========================================
 if not st.session_state.active_user:
 
-    st.markdown("<div class='main-title'>🚀 Nova</div>", unsafe_allow_html=True)
-    st.markdown("<div class='subtitle'>Who's studying today?</div>", unsafe_allow_html=True)
+    st.markdown("<div class='n-display'>🚀 Nova</div>", unsafe_allow_html=True)
+    st.markdown("<div class='n-body' style='text-align:center;margin-bottom:20px;'>Who's studying today?</div>", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
 
     profiles = load_profiles()
@@ -626,9 +626,9 @@ if not st.session_state.active_user:
                 xp  = data.get("xp", 0)
                 # Mostrar card visual
                 st.markdown(
-                    f"<div class='profile-card'>"
+                    f"<div class='n-profile'>"
                     f"<div style='font-size:52px;'>{av}</div>"
-                    f"<div style='font-family:Syne,sans-serif;font-weight:800;"
+                    f"<div style='font-family:'Space Grotesk',sans-serif;font-weight:800;"
                     f"font-size:18px;margin-top:10px;'>{name}</div>"
                     f"<div style='font-size:13px;opacity:0.65;margin-top:4px;'>"
                     f"{LEVEL_ICONS.get(lvl,'')} Lv{lvl} · {xp} XP</div>"
@@ -667,8 +667,8 @@ else:
     user_avatar = get_avatar(user_name)
 
     # Header
-    st.markdown("<div class='main-title'>🚀 Nova</div>", unsafe_allow_html=True)
-    st.markdown("<div class='subtitle'>Your AI-powered study companion</div>", unsafe_allow_html=True)
+    st.markdown("<div class='n-display'>🚀 Nova</div>", unsafe_allow_html=True)
+    st.markdown("<div class='n-body' style='text-align:center;margin-bottom:20px;'>Your AI-powered study companion</div>", unsafe_allow_html=True)
 
     c1,c2,c3 = st.columns([4,1,4])
     with c2:
@@ -679,7 +679,7 @@ else:
 
     # Tip del día
     st.markdown(
-        f"<div class='tip-card'>💡 <b>Nova's Tip of the Day:</b> {daily_tip()}</div>",
+        f"<div class='n-tip'>💡 <b>Nova's Tip of the Day:</b> {daily_tip()}</div>",
         unsafe_allow_html=True
     )
 
@@ -694,13 +694,13 @@ else:
     cm, cs = st.columns([1, 3])
     with cm:
         st.markdown(
-            f"<div class='nova-card'><div class='nova-face'>{emoji}</div>"
-            f"<div class='nova-text'>Nova AI</div></div>",
+            f"<div class='n-card-accent'><div class='n-anim-float'>{emoji}</div>"
+            f"<div class='n-label'>Nova AI</div></div>",
             unsafe_allow_html=True
         )
     with cs:
         st.markdown(f"""
-        <div class='nova-card'>
+        <div class='n-card-accent'>
             <div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;'>
                 <h2 style='color:white;margin:0;'>Nova says:</h2>
                 <span style='font-size:20px;'>{user_avatar}
@@ -710,7 +710,7 @@ else:
             <div style='margin-top:12px;'>
                 <span style='font-size:13px;opacity:0.85;'>{lvl_icon} Level {st.session_state.level}
                 — {lvl_name} &nbsp;·&nbsp; {st.session_state.xp} XP</span>
-                <div class='xp-bar-outer'>
+                <div class='n-xpbar'>
                     <div style='height:100%;width:{pct}%;
                     background:linear-gradient(90deg,#a5f3fc,#818cf8);
                     border-radius:999px;'></div>
@@ -1163,7 +1163,7 @@ else:
                 with st.spinner("Nova is thinking..."):
                     answer = ask_ai(q)
                 st.markdown(
-                    f"<div class='card'><h3>Nova's Explanation</h3>"
+                    f"<div class='n-card'><h3>Nova's Explanation</h3>"
                     f"<p style='line-height:1.9;'>{answer.replace(chr(10),'<br>')}</p></div>",
                     unsafe_allow_html=True)
                 st.success("💡 Want to practice? Go to **Quiz Arena**!")
@@ -1184,10 +1184,10 @@ else:
             answers = {}
             for i, q in enumerate(st.session_state.quiz):
                 st.markdown(
-                    f"<div class='quiz-box'>"
+                    f"<div class='n-quiz-card'>"
                     f"<div style='display:flex;justify-content:space-between;"
                     f"align-items:center;margin-bottom:10px;'>"
-                    f"<span style='font-family:Syne,sans-serif;font-weight:800;font-size:17px;'>"
+                    f"<span style='font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:17px;'>"
                     f"Question {i+1}</span>{diff_badge(q.get('difficulty','medium'))}</div>"
                     f"<p style='font-size:17px;font-weight:500;'>{q['question']}</p></div>",
                     unsafe_allow_html=True)
@@ -1217,7 +1217,7 @@ else:
                     play_sound("wrong")
 
                 st.markdown(
-                    f"<div class='card' style='text-align:center;'>"
+                    f"<div class='n-card' style='text-align:center;'>"
                     f"<h2>Score: {score} / {len(st.session_state.quiz)}</h2>"
                     f"<p style='font-size:18px;'>You earned <b>+{gained} XP</b>"
                     f"{'  🎉 (+20 bonus!)' if score==5 else ''}</p></div>",
@@ -1236,7 +1236,7 @@ else:
 
                 if score == len(st.session_state.quiz):
                     st.markdown(
-                        f"<div class='certificate'>"
+                        f"<div class='n-cert'>"
                         f"<div style='font-size:64px;'>🏆</div><h1>Certificate of Achievement</h1>"
                         f"<p style='font-size:18px;'>Perfect score on <b>{st.session_state.last_topic}</b></p>"
                         f"<p>Earned by: <b>{user_name}</b></p>"
@@ -1248,7 +1248,7 @@ else:
     elif page == "⚔️ Battle Mode":
         st.header("⚔️ Quiz Battle Mode")
         st.markdown(
-            "<div class='card'><p>Two players answer the same quiz. "
+            "<div class='n-card'><p>Two players answer the same quiz. "
             "Most correct answers wins! 🏆</p></div>", unsafe_allow_html=True)
 
         if not st.session_state.battle_state:
@@ -1274,18 +1274,18 @@ else:
             # Scoreboard
             c1, cv, c2 = st.columns([2,1,2])
             with c1:
-                st.markdown(f"<div class='battle-p1'>"
+                st.markdown(f"<div class='n-battle-p1'>"
                             f"<div style='font-size:18px;font-weight:800;'>🔵 {players[0]}</div>"
-                            f"<div class='battle-score'>{bs['scores'][1]}</div></div>",
+                            f"<div class='n-battle-score'>{bs['scores'][1]}</div></div>",
                             unsafe_allow_html=True)
             with cv:
                 st.markdown("<div style='text-align:center;padding-top:24px;"
-                            "font-family:Syne,sans-serif;font-size:28px;font-weight:900;'>VS</div>",
+                            "font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:900;'>VS</div>",
                             unsafe_allow_html=True)
             with c2:
-                st.markdown(f"<div class='battle-p2'>"
+                st.markdown(f"<div class='n-battle-p2'>"
                             f"<div style='font-size:18px;font-weight:800;'>🔴 {players[1]}</div>"
-                            f"<div class='battle-score'>{bs['scores'][2]}</div></div>",
+                            f"<div class='n-battle-score'>{bs['scores'][2]}</div></div>",
                             unsafe_allow_html=True)
             st.markdown("<br>", unsafe_allow_html=True)
 
@@ -1297,9 +1297,9 @@ else:
                 pa = {}
                 for i, q in enumerate(quiz):
                     st.markdown(
-                        f"<div class='quiz-box'>"
+                        f"<div class='n-quiz-card'>"
                         f"<div style='display:flex;justify-content:space-between;margin-bottom:8px;'>"
-                        f"<span style='font-family:Syne,sans-serif;font-weight:800;'>Q{i+1}</span>"
+                        f"<span style='font-family:'Space Grotesk',sans-serif;font-weight:800;'>Q{i+1}</span>"
                         f"{diff_badge(q.get('difficulty','medium'))}</div>"
                         f"<p style='font-size:16px;font-weight:500;'>{q['question']}</p></div>",
                         unsafe_allow_html=True)
@@ -1326,27 +1326,27 @@ else:
 
                 c1, c2 = st.columns(2)
                 with c1:
-                    st.markdown(f"<div class='battle-p1' style='padding:28px;'>"
+                    st.markdown(f"<div class='n-battle-p1' style='padding:28px;'>"
                                 f"<div style='font-size:20px;font-weight:800;'>🔵 {players[0]}</div>"
-                                f"<div class='battle-score'>{s1}/{total}</div>"
+                                f"<div class='n-battle-score'>{s1}/{total}</div>"
                                 f"<div>{int(s1/total*100)}%</div></div>", unsafe_allow_html=True)
                 with c2:
-                    st.markdown(f"<div class='battle-p2' style='padding:28px;'>"
+                    st.markdown(f"<div class='n-battle-p2' style='padding:28px;'>"
                                 f"<div style='font-size:20px;font-weight:800;'>🔴 {players[1]}</div>"
-                                f"<div class='battle-score'>{s2}/{total}</div>"
+                                f"<div class='n-battle-score'>{s2}/{total}</div>"
                                 f"<div>{int(s2/total*100)}%</div></div>", unsafe_allow_html=True)
                 st.markdown("<br>", unsafe_allow_html=True)
 
                 if winner:
                     st.markdown(
-                        f"<div class='certificate'>"
+                        f"<div class='n-cert'>"
                         f"<div style='font-size:56px;'>⚔️</div><h1>Battle Winner</h1>"
                         f"<h2>{winner}</h2>"
                         f"<p>Won with {max(s1,s2)}/{total} correct answers!</p></div>",
                         unsafe_allow_html=True)
                     update_level_and_badges()
                 else:
-                    st.markdown("<div class='card' style='text-align:center;'>"
+                    st.markdown("<div class='n-card' style='text-align:center;'>"
                                 "<div style='font-size:48px;'>🤝</div><h2>It's a Tie!</h2></div>",
                                 unsafe_allow_html=True)
 
@@ -1378,17 +1378,17 @@ else:
                     rev = st.session_state.flash_revealed.get(idx, False)
                     if rev:
                         st.markdown(
-                            f"<div class='flashcard' style='background:linear-gradient(135deg,#065f46,#10b981);color:white;'>"
+                            f"<div class='n-flash' class='n-flash-rev'>"
                             f"<div style='font-size:13px;letter-spacing:1px;text-transform:uppercase;"
                             f"opacity:0.8;margin-bottom:8px;'>DEFINITION</div>"
                             f"<div style='font-size:18px;font-weight:600;line-height:1.5;'>"
                             f"{card['definition']}</div></div>", unsafe_allow_html=True)
                     else:
                         st.markdown(
-                            f"<div class='flashcard'>"
+                            f"<div class='n-flash'>"
                             f"<div style='font-size:13px;letter-spacing:1px;text-transform:uppercase;"
                             f"opacity:0.6;margin-bottom:8px;'>TERM</div>"
-                            f"<div style='font-size:24px;font-weight:800;font-family:Syne,sans-serif;'>"
+                            f"<div style='font-size:24px;font-weight:800;font-family:'Space Grotesk',sans-serif;'>"
                             f"{card['term']}</div>"
                             f"<div style='font-size:13px;opacity:0.6;margin-top:10px;'>Tap to reveal ↓</div>"
                             f"</div>", unsafe_allow_html=True)
@@ -1409,7 +1409,7 @@ else:
             for i, d in enumerate(st.session_state.study_plan_days):
                 res = d.get("resource","")
                 st.markdown(
-                    f"<div class='card'>"
+                    f"<div class='n-card'>"
                     f"<div style='display:flex;align-items:center;gap:12px;margin-bottom:8px;'>"
                     f"<span style='font-size:32px;'>{icons[i] if i<5 else '📌'}</span>"
                     f"<div><h3 style='margin:0;'>{d.get('day','Day')}: {d.get('title','')}</h3>"
@@ -1425,7 +1425,7 @@ else:
     elif page == "📉 Weak Topics":
         st.header("📉 Weak Topic Analysis")
         st.markdown(
-            "<div class='card'><p>Nova tracks your quiz scores per topic. "
+            "<div class='n-card'><p>Nova tracks your quiz scores per topic. "
             "Anything below 70% shows here so you know exactly where to focus.</p></div>",
             unsafe_allow_html=True)
         weak = get_weak_topics()
@@ -1439,7 +1439,7 @@ else:
                 for t in needs:
                     c = "#ef4444" if t["avg"]<50 else "#f59e0b"
                     st.markdown(
-                        f"<div class='weak-topic'>"
+                        f"<div class='n-weak'>"
                         f"<div><b>{t['topic']}</b>"
                         f"<div style='font-size:12px;opacity:0.7;'>{t['attempts']} attempt(s)</div></div>"
                         f"<div style='flex:1;margin:0 20px;'>"
@@ -1454,7 +1454,7 @@ else:
                 st.markdown("### ✅ Topics you're mastering")
                 for t in good:
                     st.markdown(
-                        f"<div class='history-item'>"
+                        f"<div class='n-history'>"
                         f"<span>📚 <b>{t['topic']}</b></span>"
                         f"<span style='opacity:0.7;'>{t['attempts']} attempt(s)</span>"
                         f"<span style='color:#22c55e;font-weight:800;font-size:18px;'>"
@@ -1462,7 +1462,7 @@ else:
             if needs:
                 w0 = needs[0]
                 st.markdown(
-                    f"<div class='tip-card'>🤖 <b>Nova recommends:</b> "
+                    f"<div class='n-tip'>🤖 <b>Nova recommends:</b> "
                     f"Your weakest topic is <b>{w0['topic']}</b> ({w0['avg']}% avg). "
                     f"Ask Nova Tutor, make flashcards, then retake the quiz!</div>",
                     unsafe_allow_html=True)
@@ -1492,7 +1492,7 @@ else:
                 subj_d = st.session_state.exam_subject or "Your Exam"
                 if dl < 0:
                     st.markdown(
-                        "<div class='countdown-box'>"
+                        "<div class='n-countdown'>"
                         "<div style='font-size:48px;'>🎉</div>"
                         "<h2 style='color:white;'>Exam completed!</h2></div>",
                         unsafe_allow_html=True)
@@ -1502,17 +1502,17 @@ else:
                            else "Do practice quizzes every day." if dl<=7
                            else "You have time — build a study plan and stick to it.")
                     st.markdown(
-                        f"<div class='countdown-box'>"
+                        f"<div class='n-countdown'>"
                         f"<div style='font-size:18px;opacity:0.8;margin-bottom:8px;'>"
                         f"{urg} {subj_d}</div>"
-                        f"<div class='countdown-number'>{dl}</div>"
+                        f"<div class='n-countdown-num'>{dl}</div>"
                         f"<div style='font-size:20px;color:rgba(255,255,255,0.7);margin:8px 0;'>"
                         f"day{'s' if dl!=1 else ''} remaining</div>"
                         f"<div style='font-size:14px;color:rgba(255,255,255,0.6);margin-top:16px;'>"
                         f"📅 {exam.strftime('%A, %B %d, %Y')}</div></div>",
                         unsafe_allow_html=True)
                     st.markdown(
-                        f"<div class='tip-card'>💡 <b>Nova says:</b> {tip}</div>",
+                        f"<div class='n-tip'>💡 <b>Nova says:</b> {tip}</div>",
                         unsafe_allow_html=True)
             except: st.error("Invalid date.")
             if st.button("🗑️ Clear"):
@@ -1525,7 +1525,7 @@ else:
         st.header("🏆 Student Progress")
         lvl = st.session_state.level
         st.markdown(
-            f"<div class='level-box'>{LEVEL_ICONS.get(lvl,'🌱')} "
+            f"<div class='n-level'>{LEVEL_ICONS.get(lvl,'🌱')} "
             f"Level {lvl} — {LEVEL_NAMES.get(lvl,'')}</div>",
             unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
@@ -1539,14 +1539,14 @@ else:
             ("🏅", len(st.session_state.badges), "Badges")]):
             with col:
                 st.markdown(
-                    f"<div class='metric-tile'><div style='font-size:28px;'>{icon}</div>"
-                    f"<div class='metric-value'>{val}</div>"
-                    f"<div class='metric-label'>{label}</div></div>",
+                    f"<div class='n-stat'><div style='font-size:28px;'>{icon}</div>"
+                    f"<div class='n-stat-num'>{val}</div>"
+                    f"<div class='n-label'>{label}</div></div>",
                     unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown(
             f"<div style='font-size:14px;margin-bottom:4px;'>XP to next level: <b>{xp_now}/{xp_range}</b></div>"
-            f"<div class='xp-bar-outer' style='height:20px;'>"
+            f"<div class='n-xpbar' style='height:20px;'>"
             f"<div style='height:100%;width:{pct}%;background:linear-gradient(90deg,#38bdf8,#818cf8);border-radius:999px;'>"
             f"</div></div>", unsafe_allow_html=True)
         st.markdown("### 🏅 Badges")
@@ -1566,7 +1566,7 @@ else:
                 ps = int(e["score"]/e["total"]*100)
                 c = "#22c55e" if ps>=80 else "#f59e0b" if ps>=60 else "#ef4444"
                 st.markdown(
-                    f"<div class='history-item'>"
+                    f"<div class='n-history'>"
                     f"<span>📚 <b>{e['topic']}</b></span>"
                     f"<span style='opacity:0.7;'>{e['date']}</span>"
                     f"<span>{e['score']}/{e['total']}</span>"
@@ -1594,7 +1594,7 @@ else:
             rank_icon = rank_icons.get(rank, f"{rank}.")
             plvl  = LEVEL_ICONS.get(player["level"],"") + " " + LEVEL_NAMES.get(player["level"],"")
             st.markdown(
-                f"<div class='history-item' style='border:{border};padding:18px 22px;'>"
+                f"<div class='n-history' style='border:{border};padding:18px 22px;'>"
                 f"<span style='font-size:24px;min-width:36px;'>{rank_icon}</span>"
                 f"<span style='font-weight:{fw};font-size:16px;flex:1;'>"
                 f"{player['name']} {you}</span>"
@@ -1616,7 +1616,7 @@ else:
                            "Web Audio API, streamlit.components.v1, iCal export."),
         ]:
             st.markdown(
-                f"<div class='card' style='padding:16px 24px;'>"
+                f"<div class='n-card' style='padding:16px 24px;'>"
                 f"<span style='font-weight:700;font-size:14px;text-transform:uppercase;"
                 f"letter-spacing:0.8px;opacity:0.6;'>{label}</span>"
                 f"<p style='margin:4px 0 0;font-size:16px;'>{value}</p></div>",
@@ -1625,3 +1625,4 @@ else:
     # Footer
     st.divider()
     st.caption("Nova 🚀 v2.0 — Streamlit Cloud · Groq · Supabase · 100% free")
+
