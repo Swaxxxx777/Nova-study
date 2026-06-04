@@ -50,110 +50,571 @@ for _k, _v in _DEFAULTS.items():
 # 3. ESTILOS  (después de session_state)
 # =========================================
 def inject_styles(dark: bool):
+    # ── PREMIUM PALETTE ────────────────────────────────────────────────────
+    # Inspired by Linear / Vercel / Arc — deep indigo base, glass surfaces
     if dark:
-        BG  = "linear-gradient(135deg,#0a0f1e 0%,#0d1b2a 50%,#0a1628 100%)"
-        SB  = "linear-gradient(180deg,#050a14 0%,#0d1b2a 100%)"
-        TM="#e2e8f0"; TS="#94a3b8"; CB="rgba(15,25,50,0.85)"; CBR="rgba(99,179,237,0.18)"
-        NG="linear-gradient(135deg,#1a56db,#0ea5e9)"; QB="#3b82f6"; QBG="rgba(15,25,50,0.9)"
-        LG="linear-gradient(135deg,#065f46,#10b981)"
+        # Backgrounds — layered depth
+        BG   = "#070611"          # void — deepest base
+        SB   = "#050410"          # sidebar slightly darker
+        CB   = "rgba(255,255,255,0.045)"   # glass card surface
+        CBR  = "rgba(255,255,255,0.08)"    # card border
+        QBG  = "rgba(255,255,255,0.035)"   # quiz box bg
+        HBG  = "rgba(255,255,255,0.03)"    # history items
+        MBG  = "rgba(124,58,237,0.12)"     # metric tile bg
+        TIPBG= "rgba(124,58,237,0.10)"     # tip card bg
+        PROFBG="rgba(255,255,255,0.045)"
+        PROFBR="rgba(124,58,237,0.3)"
+        WBG  = "rgba(239,68,68,0.08)"
+        # Accent — vivid purple
+        AC   = "#8b5cf6"          # primary purple
+        AC2  = "#06b6d4"          # cyan secondary
+        # Text hierarchy
+        TM   = "#f0eeff"          # headings — very slightly purple-tinted
+        TS   = "#8b87b8"          # body — muted lavender
+        # Component-specific
+        NG   = "linear-gradient(135deg,#4f46e5 0%,#7c3aed 60%,#9333ea 100%)"
+        QB   = "#7c3aed"
+        LG   = "linear-gradient(135deg,#064e3b,#065f46)"
         CERTBG="linear-gradient(135deg,#1c1400,#2d1f00)"; CERTBR="#d97706"; CERTC="#fbbf24"
-        FBG="linear-gradient(135deg,#1e1b4b,#312e81)"; FTX="#c7d2fe"
-        HBG="rgba(15,25,50,0.7)"; AC="#38bdf8"
-        TI="☀️"; TL="Modo claro"; MBG="rgba(56,189,248,0.1)"
-        TIPBG="linear-gradient(135deg,#1a1040,#2d1b69)"; TIPC="#c4b5fd"
-        BP1="linear-gradient(135deg,#1e3a5f,#1a56db)"; BP2="linear-gradient(135deg,#5f1e1e,#db1a1a)"
-        WBG="rgba(239,68,68,0.1)"; CDBG="linear-gradient(135deg,#0f2027,#203a43,#2c5364)"
-        PROFBG="rgba(15,25,50,0.85)"; PROFBR="rgba(99,179,237,0.35)"
+        FBG  = "linear-gradient(135deg,rgba(79,46,220,0.2),rgba(124,58,237,0.15))"
+        FTX  = "#c4b5fd"
+        BP1  = "linear-gradient(135deg,rgba(37,99,235,0.12),rgba(29,78,216,0.06))"
+        BP2  = "linear-gradient(135deg,rgba(220,38,38,0.12),rgba(185,28,28,0.06))"
+        CDBG = "linear-gradient(135deg,#0a0915,#110e2a)"
+        TIPC = "#c4b5fd"
+        TI="☀️"; TL="Light"
     else:
-        BG  = "linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#fef9c3 100%)"
-        SB  = "linear-gradient(180deg,#1e293b 0%,#334155 100%)"
-        TM="#0f172a"; TS="#475569"; CB="#ffffff"; CBR="#bfdbfe"
-        NG="linear-gradient(135deg,#2563eb,#0ea5e9)"; QB="#2563eb"; QBG="#ffffff"
-        LG="linear-gradient(135deg,#16a34a,#22c55e)"
+        BG   = "#fafaf9"
+        SB   = "#1a1730"
+        CB   = "#ffffff"
+        CBR  = "rgba(0,0,0,0.07)"
+        QBG  = "#ffffff"
+        HBG  = "#f9f8ff"
+        MBG  = "rgba(124,58,237,0.07)"
+        TIPBG= "rgba(124,58,237,0.07)"
+        PROFBG="#ffffff"
+        PROFBR="rgba(124,58,237,0.25)"
+        WBG  = "rgba(239,68,68,0.06)"
+        AC   = "#7c3aed"
+        AC2  = "#0891b2"
+        TM   = "#0f0d1a"
+        TS   = "#6b6b8a"
+        NG   = "linear-gradient(135deg,#4f46e5 0%,#7c3aed 60%,#9333ea 100%)"
+        QB   = "#7c3aed"
+        LG   = "linear-gradient(135deg,#065f46,#059669)"
         CERTBG="linear-gradient(135deg,#fef3c7,#fde68a)"; CERTBR="#f59e0b"; CERTC="#78350f"
-        FBG="linear-gradient(135deg,#ede9fe,#ddd6fe)"; FTX="#4c1d95"
-        HBG="#f8fafc"; AC="#2563eb"
-        TI="🌙"; TL="Modo oscuro"; MBG="rgba(37,99,235,0.08)"
-        TIPBG="linear-gradient(135deg,#f5f3ff,#ede9fe)"; TIPC="#5b21b6"
-        BP1="linear-gradient(135deg,#dbeafe,#bfdbfe)"; BP2="linear-gradient(135deg,#fee2e2,#fecaca)"
-        WBG="rgba(239,68,68,0.07)"; CDBG="linear-gradient(135deg,#0f172a,#1e293b)"
-        PROFBG="#ffffff"; PROFBR="#bfdbfe"
+        FBG  = "linear-gradient(135deg,#ede9fe,#ddd6fe)"
+        FTX  = "#4c1d95"
+        BP1  = "linear-gradient(135deg,#dbeafe,#bfdbfe)"
+        BP2  = "linear-gradient(135deg,#fee2e2,#fecaca)"
+        CDBG = "linear-gradient(135deg,#0f0d1a,#1a1730)"
+        TIPC = "#5b21b6"
+        TI="🌙"; TL="Dark"
 
     st.markdown(f"""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap');
-    html,body,[class*="css"]{{font-family:'DM Sans',sans-serif;}}
-    .stApp{{background:{BG};color:{TM};}}
-    [data-testid="stSidebar"]{{background:{SB};}}
-    [data-testid="stSidebar"] *{{color:white!important;}}
-    .main-title{{font-family:'Syne',sans-serif;font-size:clamp(36px,6vw,64px);font-weight:900;
-        text-align:center;background:linear-gradient(90deg,{AC},#818cf8,{AC});
-        background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
-        background-clip:text;animation:shine 4s linear infinite;letter-spacing:-1px;}}
-    @keyframes shine{{to{{background-position:200% center;}}}}
-    .subtitle{{font-size:18px;text-align:center;color:{TS};margin-bottom:32px;font-weight:300;}}
-    /* ---- Pantalla de perfil ---- */
-    .profile-grid{{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:24px;}}
-    .profile-card{{background:{PROFBG};border:2px solid {PROFBR};border-radius:20px;
-        padding:24px 16px;text-align:center;transition:all 0.2s ease;min-width:140px;}}
-    .profile-card:hover{{transform:translateY(-4px);
-        box-shadow:0 12px 32px rgba(0,0,0,0.22);border-color:{AC};}}
-    /* ---- Cards generales ---- */
-    .card{{background:{CB};color:{TM};padding:26px 30px;border-radius:20px;
-        box-shadow:0 4px 32px rgba(0,0,0,0.15);margin-bottom:20px;border:1.5px solid {CBR};
-        backdrop-filter:blur(8px);transition:transform 0.2s,box-shadow 0.2s;}}
-    .card:hover{{transform:translateY(-2px);box-shadow:0 8px 40px rgba(0,0,0,0.22);}}
-    .nova-card{{background:{NG};color:white;padding:24px;border-radius:24px;
-        box-shadow:0 8px 32px rgba(37,99,235,0.3);margin-bottom:20px;position:relative;overflow:hidden;}}
-    .nova-card::before{{content:'';position:absolute;top:-40px;right:-40px;
-        width:120px;height:120px;background:rgba(255,255,255,0.08);border-radius:50%;}}
-    .nova-face{{font-size:72px;text-align:center;animation:float 3s ease-in-out infinite;}}
-    @keyframes float{{0%,100%{{transform:translateY(0);}}50%{{transform:translateY(-8px);}}}}
-    .nova-text{{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;text-align:center;}}
-    .tip-card{{background:{TIPBG};color:{TIPC};padding:20px 24px;border-radius:18px;
-        margin-bottom:20px;border-left:5px solid {AC};font-size:16px;line-height:1.6;font-weight:500;}}
-    .quiz-box{{background:{QBG};color:{TM};padding:24px 28px;border-radius:18px;
-        margin-bottom:18px;border-left:6px solid {QB};box-shadow:0 4px 20px rgba(0,0,0,0.12);
-        transition:border-color 0.2s;}}
-    .quiz-box:hover{{border-left-color:#818cf8;}}
-    .level-box{{background:{LG};color:white;padding:22px;border-radius:20px;
-        font-family:'Syne',sans-serif;font-size:22px;font-weight:800;text-align:center;}}
-    .certificate{{background:{CERTBG};color:{CERTC};padding:40px;border-radius:28px;
-        border:3px solid {CERTBR};text-align:center;font-family:'Syne',sans-serif;}}
-    .flashcard{{background:{FBG};color:{FTX};padding:40px 32px;border-radius:24px;
-        text-align:center;min-height:180px;display:flex;flex-direction:column;
-        justify-content:center;transition:transform 0.2s;border:1.5px solid rgba(165,180,252,0.3);}}
-    .flashcard:hover{{transform:scale(1.02);}}
-    .history-item{{background:{HBG};border:1px solid {CBR};color:{TM};padding:16px 20px;
-        border-radius:14px;margin-bottom:10px;display:flex;justify-content:space-between;
-        align-items:center;font-size:15px;transition:transform 0.15s;}}
-    .history-item:hover{{transform:translateX(4px);}}
-    .badge{{display:inline-block;padding:4px 14px;border-radius:20px;font-size:13px;font-weight:600;margin:3px;}}
-    .badge-gold{{background:linear-gradient(135deg,#f59e0b,#d97706);color:white;}}
-    .badge-silver{{background:linear-gradient(135deg,#94a3b8,#64748b);color:white;}}
-    .badge-blue{{background:linear-gradient(135deg,#3b82f6,#2563eb);color:white;}}
-    .badge-green{{background:linear-gradient(135deg,#22c55e,#16a34a);color:white;}}
-    .xp-bar-outer{{background:rgba(99,102,241,0.15);border-radius:999px;height:14px;overflow:hidden;margin:8px 0 4px;}}
-    .metric-tile{{background:{MBG};border:1px solid {CBR};border-radius:16px;padding:18px 22px;text-align:center;}}
-    .metric-value{{font-family:'Syne',sans-serif;font-size:36px;font-weight:900;color:{AC};}}
-    .metric-label{{font-size:13px;color:{TS};text-transform:uppercase;letter-spacing:0.8px;margin-top:4px;}}
-    .battle-p1{{background:{BP1};border-radius:20px;padding:20px;text-align:center;border:2px solid #3b82f6;}}
-    .battle-p2{{background:{BP2};border-radius:20px;padding:20px;text-align:center;border:2px solid #ef4444;}}
-    .battle-score{{font-family:'Syne',sans-serif;font-size:48px;font-weight:900;}}
-    .countdown-box{{background:{CDBG};color:white;padding:32px;border-radius:24px;text-align:center;}}
-    .countdown-number{{font-family:'Syne',sans-serif;font-size:72px;font-weight:900;color:{AC};line-height:1;}}
-    .weak-topic{{background:{WBG};border:1px solid rgba(239,68,68,0.3);border-radius:14px;
-        padding:14px 18px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}}
-    h1,h2,h3{{font-family:'Syne',sans-serif!important;color:{TM}!important;}}
-    .stButton>button{{font-family:'DM Sans',sans-serif!important;font-weight:600!important;
-        border-radius:12px!important;transition:all 0.2s!important;}}
-    .stButton>button:hover{{transform:translateY(-1px)!important;box-shadow:0 6px 20px rgba(0,0,0,0.2)!important;}}
-    div[data-testid="stRadio"] label{{color:{TM}!important;}}
-    .stTextInput>div>div>input,.stTextArea>div>div>textarea{{
-        background:{CB}!important;color:{TM}!important;
-        border-radius:12px!important;border:1.5px solid {CBR}!important;}}
-    p,li,span{{color:{TS};}}
-    .card p,.card h2,.card h3,.card span,.card li{{color:{TM}!important;}}
+    /* ── FONTS ─────────────────────────────────────────────────────────── */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..700;1,14..32,300..700&family=Syne:wght@600;700;800;900&display=swap');
+
+    /* ── BASE ───────────────────────────────────────────────────────────── */
+    html,body,[class*="css"] {{
+        font-family:'Inter',system-ui,-apple-system,sans-serif;
+        -webkit-font-smoothing:antialiased;
+        -moz-osx-font-smoothing:grayscale;
+    }}
+    .stApp {{ background:{BG}!important; color:{TM}; }}
+
+    /* ── HIDE STREAMLIT CHROME ──────────────────────────────────────────── */
+    #MainMenu {{ visibility:hidden; }}
+    footer    {{ visibility:hidden; }}
+    header    {{ visibility:hidden; }}
+    [data-testid="stToolbar"] {{ display:none; }}
+    .block-container {{ padding-top:2rem!important; max-width:1100px!important; }}
+
+    /* ── CUSTOM SCROLLBAR ───────────────────────────────────────────────── */
+    ::-webkit-scrollbar {{ width:6px; height:6px; }}
+    ::-webkit-scrollbar-track {{ background:transparent; }}
+    ::-webkit-scrollbar-thumb {{ background:rgba(124,58,237,0.3); border-radius:999px; }}
+    ::-webkit-scrollbar-thumb:hover {{ background:rgba(124,58,237,0.55); }}
+
+    /* ── SIDEBAR ────────────────────────────────────────────────────────── */
+    [data-testid="stSidebar"] {{
+        background:{SB}!important;
+        border-right:1px solid rgba(255,255,255,0.05)!important;
+    }}
+    [data-testid="stSidebar"] * {{ color:rgba(255,255,255,0.75)!important; }}
+    [data-testid="stSidebar"] h1,[data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3,[data-testid="stSidebar"] strong {{
+        color:rgba(255,255,255,0.95)!important;
+    }}
+    [data-testid="stSidebar"] div[data-testid="stRadio"] label {{
+        border-radius:8px!important;
+        padding:7px 12px!important;
+        font-size:13px!important;
+        font-weight:500!important;
+        letter-spacing:-0.01em!important;
+        transition:all 0.15s ease!important;
+    }}
+    [data-testid="stSidebar"] div[data-testid="stRadio"] label:hover {{
+        background:rgba(139,92,246,0.15)!important;
+        color:rgba(255,255,255,0.95)!important;
+    }}
+
+    /* ── TYPOGRAPHY ─────────────────────────────────────────────────────── */
+    h1,h2,h3 {{
+        font-family:'Syne',sans-serif!important;
+        color:{TM}!important;
+        letter-spacing:-0.025em!important;
+    }}
+    h1 {{ font-size:22px!important; font-weight:800!important; }}
+    h2 {{ font-size:18px!important; font-weight:700!important; }}
+    h3 {{ font-size:15px!important; font-weight:600!important; }}
+    p,li,span {{ color:{TS}; font-size:14px; line-height:1.6; }}
+
+    /* ── ANIMATED TITLE ─────────────────────────────────────────────────── */
+    .main-title {{
+        font-family:'Syne',sans-serif;
+        font-size:clamp(32px,5vw,56px);
+        font-weight:900;
+        text-align:center;
+        background:linear-gradient(135deg,#f0eeff 0%,{AC} 50%,#06b6d4 100%);
+        background-size:200% auto;
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
+        background-clip:text;
+        animation:shine 5s linear infinite;
+        letter-spacing:-0.03em;
+        line-height:1.1;
+        margin-bottom:4px;
+    }}
+    @keyframes shine {{ to {{ background-position:200% center; }} }}
+    .subtitle {{
+        font-size:15px;
+        text-align:center;
+        color:{TS};
+        margin-bottom:28px;
+        font-weight:400;
+        letter-spacing:-0.01em;
+    }}
+
+    /* ── GLASS CARDS ────────────────────────────────────────────────────── */
+    .card {{
+        background:{CB};
+        color:{TM};
+        padding:24px 28px;
+        border-radius:16px;
+        border:1px solid {CBR};
+        backdrop-filter:blur(12px) saturate(1.4);
+        -webkit-backdrop-filter:blur(12px) saturate(1.4);
+        margin-bottom:16px;
+        transition:border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        animation:fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both;
+    }}
+    .card:hover {{
+        border-color:rgba(139,92,246,0.25);
+        box-shadow:0 8px 32px rgba(124,58,237,0.12);
+        transform:translateY(-1px);
+    }}
+    .card p,.card h2,.card h3,.card span,.card li {{ color:{TM}!important; }}
+    @keyframes fadeUp {{
+        from {{ opacity:0; transform:translateY(12px); }}
+        to   {{ opacity:1; transform:translateY(0);    }}
+    }}
+
+    /* ── NOVA HERO CARD ─────────────────────────────────────────────────── */
+    .nova-card {{
+        background:{NG};
+        color:white;
+        padding:22px 26px;
+        border-radius:20px;
+        box-shadow:0 12px 40px rgba(124,58,237,0.35),
+                   inset 0 1px 0 rgba(255,255,255,0.15);
+        margin-bottom:16px;
+        position:relative;
+        overflow:hidden;
+        border:1px solid rgba(255,255,255,0.1);
+    }}
+    .nova-card::before {{
+        content:'';
+        position:absolute;
+        top:-60px;right:-60px;
+        width:180px;height:180px;
+        background:radial-gradient(circle,rgba(255,255,255,0.12),transparent 70%);
+        border-radius:50%;
+        pointer-events:none;
+    }}
+    .nova-card::after {{
+        content:'';
+        position:absolute;
+        bottom:-40px;left:20%;
+        width:140px;height:140px;
+        background:radial-gradient(circle,rgba(6,182,212,0.15),transparent 70%);
+        border-radius:50%;
+        pointer-events:none;
+    }}
+    .nova-face {{
+        font-size:68px;
+        text-align:center;
+        filter:drop-shadow(0 4px 16px rgba(0,0,0,0.3));
+        animation:float 3.5s ease-in-out infinite;
+    }}
+    @keyframes float {{
+        0%,100% {{ transform:translateY(0) rotate(-2deg); }}
+        50%      {{ transform:translateY(-8px) rotate(2deg); }}
+    }}
+    .nova-text {{
+        font-family:'Syne',sans-serif;
+        font-size:12px;
+        font-weight:700;
+        text-align:center;
+        letter-spacing:0.08em;
+        text-transform:uppercase;
+        opacity:0.75;
+        margin-top:6px;
+    }}
+
+    /* ── TIP CARD ───────────────────────────────────────────────────────── */
+    .tip-card {{
+        background:{TIPBG};
+        color:{TIPC};
+        padding:14px 18px;
+        border-radius:12px;
+        margin-bottom:16px;
+        border-left:3px solid {AC};
+        font-size:13px;
+        line-height:1.6;
+        font-weight:450;
+        letter-spacing:-0.005em;
+        backdrop-filter:blur(8px);
+    }}
+    .tip-card b {{ color:{TM}; font-weight:600; }}
+
+    /* ── QUIZ CARDS ─────────────────────────────────────────────────────── */
+    .quiz-box {{
+        background:{QBG};
+        color:{TM};
+        padding:20px 24px;
+        border-radius:14px;
+        margin-bottom:10px;
+        border:1px solid {CBR};
+        border-left:4px solid {QB};
+        backdrop-filter:blur(8px);
+        transition:border-color 0.15s, box-shadow 0.15s;
+        animation:fadeUp 0.35s cubic-bezier(0.16,1,0.3,1) both;
+    }}
+    .quiz-box:hover {{
+        border-left-color:{AC2};
+        box-shadow:0 4px 16px rgba(124,58,237,0.1);
+    }}
+
+    /* ── PROFILE CARD (login) ───────────────────────────────────────────── */
+    .profile-card {{
+        background:{PROFBG};
+        border:1px solid {PROFBR};
+        border-radius:18px;
+        padding:22px 14px;
+        text-align:center;
+        cursor:pointer;
+        transition:all 0.2s cubic-bezier(0.16,1,0.3,1);
+        backdrop-filter:blur(12px);
+    }}
+    .profile-card:hover {{
+        transform:translateY(-4px);
+        box-shadow:0 16px 40px rgba(124,58,237,0.2);
+        border-color:rgba(139,92,246,0.5);
+    }}
+
+    /* ── FLASHCARDS ─────────────────────────────────────────────────────── */
+    .flashcard {{
+        background:{FBG};
+        color:{FTX};
+        padding:36px 28px;
+        border-radius:20px;
+        text-align:center;
+        min-height:170px;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        cursor:pointer;
+        border:1px solid rgba(139,92,246,0.2);
+        transition:all 0.2s cubic-bezier(0.16,1,0.3,1);
+        backdrop-filter:blur(8px);
+    }}
+    .flashcard:hover {{
+        transform:scale(1.025) translateY(-2px);
+        box-shadow:0 12px 32px rgba(124,58,237,0.2);
+        border-color:rgba(139,92,246,0.4);
+    }}
+
+    /* ── HISTORY ITEMS ──────────────────────────────────────────────────── */
+    .history-item {{
+        background:{HBG};
+        border:1px solid {CBR};
+        color:{TM};
+        padding:13px 18px;
+        border-radius:11px;
+        margin-bottom:6px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        font-size:14px;
+        backdrop-filter:blur(8px);
+        transition:all 0.15s ease;
+    }}
+    .history-item:hover {{
+        border-color:rgba(139,92,246,0.25);
+        transform:translateX(3px);
+        background:rgba(139,92,246,0.05);
+    }}
+
+    /* ── BADGES ─────────────────────────────────────────────────────────── */
+    .badge {{
+        display:inline-flex;
+        align-items:center;
+        gap:4px;
+        padding:4px 12px;
+        border-radius:999px;
+        font-size:12px;
+        font-weight:600;
+        letter-spacing:0.01em;
+        margin:3px;
+    }}
+    .badge-gold   {{ background:linear-gradient(135deg,#f59e0b,#d97706);
+                     color:white; box-shadow:0 2px 8px rgba(245,158,11,0.35); }}
+    .badge-silver {{ background:linear-gradient(135deg,#94a3b8,#64748b); color:white; }}
+    .badge-blue   {{ background:linear-gradient(135deg,#7c3aed,#4f46e5);
+                     color:white; box-shadow:0 2px 8px rgba(124,58,237,0.35); }}
+    .badge-green  {{ background:linear-gradient(135deg,#22c55e,#16a34a); color:white; }}
+
+    /* ── XP BAR ─────────────────────────────────────────────────────────── */
+    .xp-bar-outer {{
+        background:rgba(139,92,246,0.12);
+        border-radius:999px;
+        height:5px;
+        overflow:hidden;
+        margin:8px 0 4px;
+        border:none;
+    }}
+
+    /* ── METRIC TILES ───────────────────────────────────────────────────── */
+    .metric-tile {{
+        background:{MBG};
+        border:1px solid rgba(139,92,246,0.15);
+        border-radius:14px;
+        padding:18px 20px;
+        text-align:center;
+        backdrop-filter:blur(8px);
+        transition:all 0.2s ease;
+    }}
+    .metric-tile:hover {{
+        border-color:rgba(139,92,246,0.3);
+        box-shadow:0 4px 16px rgba(124,58,237,0.1);
+    }}
+    .metric-value {{
+        font-family:'Syne',sans-serif;
+        font-size:34px;
+        font-weight:800;
+        color:{AC};
+        line-height:1.1;
+        letter-spacing:-0.03em;
+    }}
+    .metric-label {{
+        font-size:11px;
+        color:{TS};
+        text-transform:uppercase;
+        letter-spacing:0.07em;
+        margin-top:4px;
+        font-weight:600;
+    }}
+
+    /* ── BATTLE ─────────────────────────────────────────────────────────── */
+    .battle-p1 {{
+        background:{BP1};
+        border-radius:18px;
+        padding:20px;
+        text-align:center;
+        border:1px solid rgba(59,130,246,0.2);
+        backdrop-filter:blur(8px);
+    }}
+    .battle-p2 {{
+        background:{BP2};
+        border-radius:18px;
+        padding:20px;
+        text-align:center;
+        border:1px solid rgba(239,68,68,0.2);
+        backdrop-filter:blur(8px);
+    }}
+    .battle-score {{
+        font-family:'Syne',sans-serif;
+        font-size:52px;
+        font-weight:900;
+        letter-spacing:-0.03em;
+        color:{TM};
+    }}
+
+    /* ── LEVEL BOX ──────────────────────────────────────────────────────── */
+    .level-box {{
+        background:{LG};
+        color:white;
+        padding:18px 24px;
+        border-radius:16px;
+        font-family:'Syne',sans-serif;
+        font-size:20px;
+        font-weight:800;
+        text-align:center;
+        box-shadow:0 8px 24px rgba(5,150,105,0.25);
+        letter-spacing:-0.02em;
+    }}
+
+    /* ── CERTIFICATE ────────────────────────────────────────────────────── */
+    .certificate {{
+        background:{CERTBG};
+        color:{CERTC};
+        padding:40px;
+        border-radius:24px;
+        border:2px solid {CERTBR};
+        text-align:center;
+        font-family:'Syne',sans-serif;
+        box-shadow:0 16px 48px rgba(217,119,6,0.2);
+        animation:fadeUp 0.5s ease both;
+    }}
+
+    /* ── COUNTDOWN ──────────────────────────────────────────────────────── */
+    .countdown-box {{
+        background:{CDBG};
+        color:white;
+        padding:32px;
+        border-radius:20px;
+        text-align:center;
+        border:1px solid rgba(139,92,246,0.15);
+        box-shadow:0 8px 32px rgba(0,0,0,0.3);
+    }}
+    .countdown-number {{
+        font-family:'Syne',sans-serif;
+        font-size:80px;
+        font-weight:900;
+        color:{AC};
+        line-height:1;
+        letter-spacing:-0.04em;
+        text-shadow:0 0 40px rgba(139,92,246,0.5);
+    }}
+
+    /* ── WEAK TOPIC ─────────────────────────────────────────────────────── */
+    .weak-topic {{
+        background:{WBG};
+        border:1px solid rgba(239,68,68,0.15);
+        border-radius:12px;
+        padding:13px 16px;
+        margin-bottom:8px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        backdrop-filter:blur(8px);
+    }}
+
+    /* ── STREAMLIT COMPONENTS ───────────────────────────────────────────── */
+    /* Buttons */
+    .stButton>button {{
+        font-family:'Inter',sans-serif!important;
+        font-weight:600!important;
+        font-size:13px!important;
+        letter-spacing:-0.01em!important;
+        border-radius:10px!important;
+        padding:9px 18px!important;
+        transition:all 0.15s cubic-bezier(0.16,1,0.3,1)!important;
+        border:none!important;
+    }}
+    .stButton>button:hover {{
+        transform:translateY(-1px)!important;
+        filter:brightness(1.1)!important;
+        box-shadow:0 6px 20px rgba(124,58,237,0.3)!important;
+    }}
+    .stButton>button:active {{
+        transform:translateY(0)!important;
+        filter:brightness(0.95)!important;
+    }}
+
+    /* Inputs */
+    .stTextInput>div>div>input,
+    .stTextArea>div>div>textarea {{
+        background:{CB}!important;
+        color:{TM}!important;
+        border:1px solid {CBR}!important;
+        border-radius:10px!important;
+        font-size:14px!important;
+        font-family:'Inter',sans-serif!important;
+        letter-spacing:-0.01em!important;
+        backdrop-filter:blur(8px)!important;
+        transition:border-color 0.15s!important;
+    }}
+    .stTextInput>div>div>input:focus,
+    .stTextArea>div>div>textarea:focus {{
+        border-color:rgba(139,92,246,0.5)!important;
+        box-shadow:0 0 0 3px rgba(139,92,246,0.12)!important;
+    }}
+
+    /* Radio */
+    div[data-testid="stRadio"] label {{
+        color:{TM}!important;
+        font-size:14px!important;
+        letter-spacing:-0.01em!important;
+    }}
+
+    /* Date input */
+    .stDateInput>div>div>input {{
+        background:{CB}!important;
+        color:{TM}!important;
+        border:1px solid {CBR}!important;
+        border-radius:10px!important;
+    }}
+
+    /* Expander */
+    .streamlit-expanderHeader {{
+        font-size:14px!important;
+        font-weight:500!important;
+        color:{TM}!important;
+        background:{CB}!important;
+        border-radius:10px!important;
+        letter-spacing:-0.01em!important;
+    }}
+
+    /* Alerts */
+    .stSuccess,.stInfo,.stWarning,.stError {{
+        border-radius:10px!important;
+        font-size:13px!important;
+        font-family:'Inter',sans-serif!important;
+    }}
+
+    /* Spinner */
+    .stSpinner>div {{ border-top-color:{AC}!important; }}
+
+    /* Download button */
+    .stDownloadButton>button {{
+        font-family:'Inter',sans-serif!important;
+        border-radius:10px!important;
+        border:1px solid {CBR}!important;
+        background:{CB}!important;
+        font-size:13px!important;
+        font-weight:600!important;
+    }}
+    .stDownloadButton>button:hover {{
+        border-color:rgba(139,92,246,0.35)!important;
+        color:{AC}!important;
+    }}
+
+    /* Divider */
+    hr {{ border:none; border-top:1px solid {CBR}; margin:16px 0; }}
+    [data-testid="stDivider"] {{ border-color:{CBR}; }}
+
+    /* Caption */
+    .stCaption {{ font-size:12px!important; color:{TS}!important; }}
+
+    /* Mobile */
+    @media(max-width:768px) {{
+        .block-container {{ padding:12px 12px 40px!important; }}
+        .main-title {{ font-size:32px!important; }}
+        .nova-face  {{ font-size:52px!important; }}
+    }}
     </style>
     """, unsafe_allow_html=True)
     return TI, TL
