@@ -159,6 +159,27 @@ def inject_styles(dark: bool):
         background:rgba(139,92,246,0.15)!important;
         color:rgba(255,255,255,0.95)!important;
     }}
+    /* Sidebar buttons — transparent dark style */
+    [data-testid="stSidebar"] .stButton>button {{
+        background:rgba(255,255,255,0.06)!important;
+        color:rgba(255,255,255,0.75)!important;
+        border:1px solid rgba(255,255,255,0.1)!important;
+        font-size:13px!important;
+        font-weight:500!important;
+        padding:7px 14px!important;
+        border-radius:9px!important;
+        width:100%!important;
+        text-align:left!important;
+        transition:all 0.15s ease!important;
+    }}
+    [data-testid="stSidebar"] .stButton>button:hover {{
+        background:rgba(255,255,255,0.1)!important;
+        color:rgba(255,255,255,0.95)!important;
+        border-color:rgba(255,255,255,0.2)!important;
+        transform:none!important;
+        box-shadow:none!important;
+        filter:none!important;
+    }}
 
     /* ── TYPOGRAPHY ─────────────────────────────────────────────────────── */
     h1,h2,h3 {{
