@@ -558,20 +558,24 @@ def inject_styles(dark: bool):
     /* Inputs */
     .stTextInput>div>div>input,
     .stTextArea>div>div>textarea {{
-        background:{CB}!important;
-        color:{TM}!important;
-        border:1px solid {CBR}!important;
+        background:rgba(15,12,35,0.95)!important;
+        color:#f0eeff!important;
+        border:1px solid rgba(139,92,246,0.2)!important;
         border-radius:10px!important;
         font-size:14px!important;
         font-family:'Inter',sans-serif!important;
         letter-spacing:-0.01em!important;
-        backdrop-filter:blur(8px)!important;
         transition:border-color 0.15s!important;
+        caret-color:#8b5cf6!important;
     }}
     .stTextInput>div>div>input:focus,
     .stTextArea>div>div>textarea:focus {{
-        border-color:rgba(139,92,246,0.5)!important;
+        border-color:rgba(139,92,246,0.55)!important;
         box-shadow:0 0 0 3px rgba(139,92,246,0.12)!important;
+    }}
+    .stTextInput>div>div>input::placeholder,
+    .stTextArea>div>div>textarea::placeholder {{
+        color:rgba(139,120,220,0.45)!important;
     }}
 
     /* Radio */
